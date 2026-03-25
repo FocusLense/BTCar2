@@ -28,8 +28,8 @@ class MyServerCallbacks: public BLEServerCallbacks {
     }
 };
 
-volatile int g_steering = 0;
-volatile int g_throttle = 0;
+volatile uint8_t g_steering = 0;
+volatile uint8_t g_throttle = 0;
 
 portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
 class MyCallbacks: public BLECharacteristicCallbacks {
@@ -40,18 +40,18 @@ class MyCallbacks: public BLECharacteristicCallbacks {
       if (rxValue.length() > 0) {
         
         String data = String(rxValue.c_str());
-        int commaIndex = data.indexOf(',');
+        int8_t commaIndex = data.indexOf(',');
         if(commaIndex  != -1)
         {
-          g_steering = data.substring(0,commaIndex).toInt();
-          g_throttle = data.substring(commaIndex+1).toInt();
-          Serial.print("\nSteering: ");
+          g_steering = data.substring(0,commaIndex).toInt()+100;
+          g_throttle = data.substring(commaIndex+1).toInt()+100;
+          /* Serial.print("\nSteering: ");
           Serial.print(g_steering);
           Serial.print("\nThrottle: ");
-          Serial.print(g_throttle);
-          int steeringPWM = map(g_steering,-100,100,1638,8192);
-          Serial.print("\nSteeringPWM: ");
-          Serial.print(steeringPWM);
+          Serial.print(g_throttle); */
+          uint16_t steeringPWM = map(g_steering,-100,100,1638,8192);
+          /* Serial.print("\nSteeringPWM: ");
+          Serial.print(steeringPWM); */
         }
       }
       portEXIT_CRITICAL(&mux);
@@ -87,7 +87,7 @@ void setup() {
   pService->start();
 
   pServer->getAdvertising()->start();
-  Serial.println("Waiting a connection");
+  //Serial.println("Waiting a connection");
 
 
   pinMode(DRIVER_SLEEP_PIN, OUTPUT);
@@ -107,8 +107,8 @@ void setup() {
 
 void loop() {
   portENTER_CRITICAL(&mux);
-  int steering = g_steering;
-  int throttle = g_throttle;
+  uint8_t steering = g_steering;
+  uint8_t throttle = g_throttle;
   portEXIT_CRITICAL(&mux);
 
   //todo
