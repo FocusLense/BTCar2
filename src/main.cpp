@@ -91,7 +91,7 @@ void setup() {
 
 
   pinMode(DRIVER_SLEEP_PIN, OUTPUT);
-  digitalWrite(DRIVER_SLEEP_PIN, HIGH);  // Treiber aktivieren
+  digitalWrite(DRIVER_SLEEP_PIN, HIGH);  
 
   ledcSetup(MOTOR_CH1, 10000, 8); // 10 kHz, 8 Bit
   ledcSetup(MOTOR_CH2, 10000, 8);
@@ -106,19 +106,18 @@ void setup() {
 
 
 void loop() {
-  portENTER_CRITICAL(&mux);
   uint8_t steering = g_steering;
   uint8_t throttle = g_throttle;
-  portEXIT_CRITICAL(&mux);
-
-  //todo
+  
+  //give steering command to servo(0 to 200, full left to full right)
   ledcWrite(SERVO_CH,map(steering,-100,100,205,410));
 
-  if(throttle >= 0){
+  //throttle command to motor(-100 to 100, full backward to full forward)
+  if(throttle >= 0){//forward
     ledcWrite(MOTOR_CH1,map(throttle,0,100,0,255));
     ledcWrite(MOTOR_CH2,0);
   }
-  else{
+  else{//backward
     ledcWrite(MOTOR_CH2,map(-throttle,0,100,0,255));
     ledcWrite(MOTOR_CH1,0);
   }
