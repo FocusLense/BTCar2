@@ -57,29 +57,24 @@ class MyCallbacks: public BLECharacteristicCallbacks {
       portEXIT_CRITICAL(&mux);
     }
 };
-// Pins
+
 #define SERVO_PIN 21  
 #define MOTOR_IN1 6  
 #define MOTOR_IN2 7  
 #define DRIVER_SLEEP_PIN 4
 
-// PWM Kanäle
 #define SERVO_CH 3
 #define MOTOR_CH1 0
 #define MOTOR_CH2 1
 
-//
 void setup() {
   Serial.begin(115200);
 
-  // Create the BLE Device
   BLEDevice::init("BLE CAR");
 
-  // Create the BLE Server
   pServer = BLEDevice::createServer();
   pServer->setCallbacks(new MyServerCallbacks());
 
-  // Create the BLE Service
   BLEService *pService = pServer->createService(SERVICE_UUID);
 
   BLECharacteristic * pRxCharacteristic = pService->createCharacteristic(
@@ -89,25 +84,20 @@ void setup() {
 
   pRxCharacteristic->setCallbacks(new MyCallbacks());
 
-  // Start the service
   pService->start();
 
-  // Start advertising
   pServer->getAdvertising()->start();
   Serial.println("Waiting a connection");
 
 
-  //Activate driver: 
   pinMode(DRIVER_SLEEP_PIN, OUTPUT);
   digitalWrite(DRIVER_SLEEP_PIN, HIGH);  // Treiber aktivieren
 
-  //motor/servo setup// PWM Setup für Motor
   ledcSetup(MOTOR_CH1, 10000, 8); // 10 kHz, 8 Bit
   ledcSetup(MOTOR_CH2, 10000, 8);
   ledcAttachPin(MOTOR_IN1, MOTOR_CH1);
   ledcAttachPin(MOTOR_IN2, MOTOR_CH2);
 
-  // PWM Setup für Servo (50Hz, 16Bit)
   ledcSetup(SERVO_CH, 50, 12);
   ledcAttachPin(SERVO_PIN, SERVO_CH);
   pinMode(9, OUTPUT);
@@ -121,7 +111,7 @@ void loop() {
   int throttle = g_throttle;
   portEXIT_CRITICAL(&mux);
 
-  
+  //todo
   ledcWrite(SERVO_CH,map(steering,-100,100,205,410));
 
   if(throttle >= 0){
