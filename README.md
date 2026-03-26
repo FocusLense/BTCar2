@@ -11,7 +11,7 @@ A Bluetooth-controlled 3D-printed micro car built around an ESP32-C3. It uses a 
 <li>Extras: photos of current print and CAD model</li>
 </ul>
 
-<h3 align="left">Quick start / What’s included</h3>
+<h3 align="left">Quick start: What is needed</h3>
 
 Part list:
 <ul>
