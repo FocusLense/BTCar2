@@ -32,7 +32,7 @@ Part list:
 </ul>
 
 <h3 align="left">Communication:</h3>
-<p>the App sends a string with steering and throttle values from 0 to 100, separated by a comma "steering,throttle".</p> 
+<p>the App sends a string with steering and throttle values from -100 to 100, separated by a comma "steering,throttle".</p> 
 <p>You could implement it yourself sending a string via Bluetooth LE in a webapp.</p>
 
 ![image alt](https://github.com/FocusLense/BTCar2/blob/44fdf8898ba8b45a7a1847c8825a913fdb1e7667/photo_2026-03-25_19-59-34.jpg)
